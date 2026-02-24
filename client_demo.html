@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AARO - AI Revenue Operations Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .demo-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        .api-call { background: #f8f9fa; padding: 15px; border-radius: 5px; font-family: monospace; }
+        .result { background: #e8f5e8; padding: 15px; border-radius: 5px; margin-top: 10px; }
+        .button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        .value-prop { background: #fff3cd; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .metrics { display: flex; justify-content: space-around; margin: 20px 0; }
+        .metric { text-align: center; padding: 20px; background: #e3f2fd; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AARO - Autonomous AI Agent for Revenue Operations</h1>
+            <p><strong>Your 24/7 Revenue Operations Assistant</strong></p>
+        </div>
+
+        <div class="value-prop">
+            <h3>💰 The Business Problem</h3>
+            <ul>
+                <li>Deals stalling in pipeline without follow-up → Revenue leakage</li>
+                <li>Manual RevOps work consuming valuable time → Inefficiency</li>
+                <li>Missed opportunities due to poor process compliance → Lost deals</li>
+                <li>Lack of pipeline visibility until it's too late → Surprised forecasts</li>
+            </ul>
+        </div>
+
+        <div class="demo-section">
+            <h3>🔍 Step 1: Pipeline Risk Detection</h3>
+            <p><strong>Business Value:</strong> AARO monitors your pipeline 24/7 and identifies risks before they become revenue loss</p>
+            
+            <div class="api-call">
+                <strong>API Call:</strong> POST /decision/analyze-pipeline-risks<br>
+                <strong>What it does:</strong> Analyzes all deals, leads, and activities for risks
+            </div>
+            
+            <div class="result">
+                <strong>Example Results:</strong><br>
+                • 🚨 3 high-value deals stalled for 14+ days<br>
+                • ⚠️ 12 leads with insufficient touchpoints<br>
+                • 📉 2 reps falling behind activity targets<br>
+                • 💰 $250K in at-risk pipeline identified
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>⚡ Step 2: Automated Actions</h3>
+            <p><strong>Business Value:</strong> AARO automatically executes routine sales actions to prevent revenue leakage</p>
+            
+            <div class="api-call">
+                <strong>API Call:</strong> POST /actions/execute<br>
+                <strong>What it does:</strong> Creates follow-up tasks, updates CRM, sends alerts
+            </div>
+            
+            <div class="result">
+                <strong>Actions Taken:</strong><br>
+                • ✅ Created 5 follow-up tasks for stalled deals<br>
+                • 📧 Sent manager alerts for high-risk opportunities<br>
+                • 📅 Scheduled next actions for all active leads<br>
+                • 🎯 Updated deal flags in CRM automatically
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>👥 Step 3: Human Approval Loop</h3>
+            <p><strong>Business Value:</strong> For high-impact decisions, AARO requests human approval to ensure safety</p>
+            
+            <div class="api-call">
+                <strong>API Call:</strong> POST /human-loop/approvals<br>
+                <strong>What it does:</strong> Requests approval for critical revenue decisions
+            </div>
+            
+            <div class="result">
+                <strong>Approval Request:</strong><br>
+                🚨 <strong>High-Value Deal Alert</strong><br>
+                Deal: Enterprise Corp - $100,000<br>
+                Issue: Stalled for 21 days, no scheduled next action<br>
+                Recommendation: Schedule urgent call with decision maker<br>
+                <button class="button">Approve</button> <button class="button">Modify</button>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>📊 Step 4: Revenue Impact Tracking</h3>
+            <p><strong>Business Value:</strong> Measure the ROI of every AARO intervention</p>
+            
+            <div class="metrics">
+                <div class="metric">
+                    <h4>$125K</h4>
+                    <p>Pipeline Recovered</p>
+                </div>
+                <div class="metric">
+                    <h4>15%</h4>
+                    <p>Velocity Improvement</p>
+                </div>
+                <div class="metric">
+                    <h4>8 hrs/week</h4>
+                    <p>Manual Work Saved</p>
+                </div>
+                <div class="metric">
+                    <h4>450%</h4>
+                    <p>ROI This Quarter</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="value-prop">
+            <h3>🎯 The Bottom Line</h3>
+            <p><strong>AARO pays for itself by preventing just ONE $50K deal from slipping through the cracks per quarter.</strong></p>
+            <ul>
+                <li>✅ 24/7 pipeline monitoring and risk detection</li>
+                <li>✅ Automated execution of routine RevOps tasks</li>
+                <li>✅ Human oversight for high-impact decisions</li>
+                <li>✅ Measurable revenue impact and ROI tracking</li>
+            </ul>
+        </div>
+
+        <div class="demo-section">
+            <h3>🚀 Live System Access</h3>
+            <p>Want to see the actual system? Visit the interactive API documentation:</p>
+            <a href="http://localhost:8000/docs" target="_blank" class="button">Open AARO API Demo</a>
+            <p><small>Use token: "demo-token" to explore all endpoints</small></p>
+        </div>
+    </div>
+</body>
+</html>

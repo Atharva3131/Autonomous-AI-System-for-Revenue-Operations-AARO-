@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aboa-config
+  namespace: aboa
+data:
+  ENVIRONMENT: "production"
+  DEBUG: "false"
+  HOST: "0.0.0.0"
+  PORT: "8000"
+  LOG_LEVEL: "INFO"
+  LOG_FORMAT: "json"
+  VECTOR_DB_COLLECTION: "aboa_knowledge_prod"
+  DEFAULT_FOLLOW_UP_DAYS: "3"
+  SLA_BREACH_THRESHOLD_HOURS: "24"
+  HIGH_VALUE_DEAL_THRESHOLD: "10000.0"
+  MAX_RETRIES: "3"
+  RETRY_DELAY_SECONDS: "2"
+  ACTION_TIMEOUT_SECONDS: "300"
+  APPROVAL_TIMEOUT_HOURS: "24"

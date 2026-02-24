@@ -1,0 +1,172 @@
+# Kubernetes monitoring configuration for ABOA
+apiVersion: v1
+kind: ServiceMonitor
+metadata:
+  name: aboa-metrics
+  namespace: aboa
+  labels:
+    app: aboa
+spec:
+  selector:
+    matchLabels:
+      app: aboa
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 10s
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: aboa-alerts
+  namespace: aboa
+  labels:
+    app: aboa
+spec:
+  groups:
+  - name: aboa.rules
+    rules:
+    - alert: AboaHighCPU
+      expr: rate(container_cpu_usage_seconds_total{pod=~"aboa-.*"}[5m]) > 0.8
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "ABOA pod has high CPU usage"
+        description: "Pod {{ $labels.pod }} has CPU usage above 80% for more than 5 minutes"
+    
+    - alert: AboaHighMemory
+      expr: container_memory_usage_bytes{pod=~"aboa-.*"} / container_spec_memory_limit_bytes > 0.8
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "ABOA pod has high memory usage"
+        description: "Pod {{ $labels.pod }} has memory usage above 80% for more than 5 minutes"
+    
+    - alert: AboaHighErrorRate
+      expr: rate(http_requests_total{job="aboa", status=~"5.."}[5m]) / rate(http_requests_total{job="aboa"}[5m]) > 0.1
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        summary: "ABOA has high error rate"
+        description: "ABOA error rate is above 10% for more than 2 minutes"
+    
+    - alert: AboaSlowResponse
+      expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="aboa"}[5m])) > 2
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "ABOA has slow response times"
+        description: "95th percentile response time is above 2 seconds for more than 5 minutes"
+    
+    - alert: AboaPodDown
+      expr: up{job="aboa"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "ABOA pod is down"
+        description: "ABOA pod {{ $labels.instance }} has been down for more than 1 minute"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aboa-grafana-dashboard
+  namespace: aboa
+  labels:
+    grafana_dashboard: "1"
+data:
+  aboa-dashboard.json: |
+    {
+      "dashboard": {
+        "id": null,
+        "title": "ABOA System Dashboard",
+        "tags": ["aboa", "revenue-operations"],
+        "timezone": "browser",
+        "panels": [
+          {
+            "id": 1,
+            "title": "Request Rate",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(http_requests_total{job=\"aboa\"}[5m])",
+                "legendFormat": "Requests/sec"
+              }
+            ],
+            "yAxes": [
+              {
+                "label": "Requests/sec"
+              }
+            ]
+          },
+          {
+            "id": 2,
+            "title": "Response Time",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"aboa\"}[5m]))",
+                "legendFormat": "95th percentile"
+              },
+              {
+                "expr": "histogram_quantile(0.50, rate(http_request_duration_seconds_bucket{job=\"aboa\"}[5m]))",
+                "legendFormat": "50th percentile"
+              }
+            ],
+            "yAxes": [
+              {
+                "label": "Seconds"
+              }
+            ]
+          },
+          {
+            "id": 3,
+            "title": "Error Rate",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(http_requests_total{job=\"aboa\", status=~\"5..\"}[5m]) / rate(http_requests_total{job=\"aboa\"}[5m]) * 100",
+                "legendFormat": "Error Rate %"
+              }
+            ],
+            "yAxes": [
+              {
+                "label": "Percentage"
+              }
+            ]
+          },
+          {
+            "id": 4,
+            "title": "System Resources",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(container_cpu_usage_seconds_total{pod=~\"aboa-.*\"}[5m]) * 100",
+                "legendFormat": "CPU %"
+              },
+              {
+                "expr": "container_memory_usage_bytes{pod=~\"aboa-.*\"} / container_spec_memory_limit_bytes * 100",
+                "legendFormat": "Memory %"
+              }
+            ],
+            "yAxes": [
+              {
+                "label": "Percentage"
+              }
+            ]
+          }
+        ],
+        "time": {
+          "from": "now-1h",
+          "to": "now"
+        },
+        "refresh": "30s"
+      }
+    }

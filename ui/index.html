@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AARO - Revenue Operations Control Panel</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <span>AARO</span>
+            </div>
+            <div class="subtitle">Revenue Operations AI</div>
+            <div class="system-status">
+                <div class="status-indicator healthy"></div>
+                <span>System Healthy</span>
+            </div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item active" data-page="overview">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Overview</span>
+            </li>
+            <li class="nav-item" data-page="pipeline-risks">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Pipeline Risks</span>
+                <span class="badge">3</span>
+            </li>
+            <li class="nav-item" data-page="ai-decisions">
+                <i class="fas fa-brain"></i>
+                <span>AI Decisions</span>
+            </li>
+            <li class="nav-item" data-page="approvals">
+                <i class="fas fa-user-check"></i>
+                <span>Approvals</span>
+                <span class="badge urgent">2</span>
+            </li>
+            <li class="nav-item" data-page="action-log">
+                <i class="fas fa-list-ul"></i>
+                <span>Action Log</span>
+            </li>
+            <li class="nav-item" data-page="observability">
+                <i class="fas fa-chart-line"></i>
+                <span>Observability</span>
+            </li>
+            <li class="nav-item" data-page="data-management">
+                <i class="fas fa-database"></i>
+                <span>Data Management</span>
+            </li>
+            <li class="nav-item" data-page="configuration">
+                <i class="fas fa-cog"></i>
+                <span>Configuration</span>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <!-- Footer content can be added here if needed -->
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1 id="page-title">Overview</h1>
+                <div class="breadcrumb">
+                    <span>AARO</span> / <span id="current-page">Overview</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="last-updated">
+                    Last updated: <span id="last-updated">2 minutes ago</span>
+                </div>
+                <button class="refresh-btn" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <button class="reset-btn" onclick="resetDemoData()" title="Reset Demo Data">
+                    <i class="fas fa-undo"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Page Content Container -->
+        <div class="page-content">
+            <!-- Overview Page -->
+            <div id="overview-page" class="page active">
+                <!-- Key Metrics Cards -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-value">247</div>
+                            <div class="metric-label">Deals Monitored</div>
+                            <div class="metric-change positive">+12 this week</div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card urgent">
+                        <div class="metric-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-value">8</div>
+                            <div class="metric-label">Active Revenue Risks</div>
+                            <div class="metric-change negative">+3 today</div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-value">23</div>
+                            <div class="metric-label">Actions Executed Today</div>
+                            <div class="metric-change positive">↑ 15% vs yesterday</div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card warning">
+                        <div class="metric-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-value">2</div>
+                            <div class="metric-label">Pending Approvals</div>
+                            <div class="metric-change">Avg. response: 4.2h</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Pipeline Risk Distribution</h3>
+                            <div class="chart-period">Last 7 days</div>
+                        </div>
+                        <div class="chart-content">
+                            <canvas id="risk-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>AI Action Volume</h3>
+                            <div class="chart-period">Last 30 days</div>
+                        </div>
+                        <div class="chart-content">
+                            <canvas id="action-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="recent-activity">
+                    <div class="section-header">
+                        <h3>Recent AI Activity</h3>
+                        <a href="#" class="view-all">View All</a>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon risk">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">High-value deal flagged for risk</div>
+                                <div class="activity-description">Enterprise Corp ($125K) - No activity for 14 days</div>
+                                <div class="activity-meta">2 minutes ago • Auto-created follow-up task</div>
+                            </div>
+                            <div class="activity-status executed">Executed</div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon approval">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Approval requested for deal intervention</div>
+                                <div class="activity-description">TechStart Inc ($75K) - Recommend urgent call</div>
+                                <div class="activity-meta">15 minutes ago • Waiting for manager approval</div>
+                            </div>
+                            <div class="activity-status pending">Pending</div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Lead nurturing sequence initiated</div>
+                                <div class="activity-description">5 leads moved to automated follow-up workflow</div>
+                                <div class="activity-meta">1 hour ago • 3 email sequences started</div>
+                            </div>
+                            <div class="activity-status executed">Executed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pipeline Risks Page -->
+            <div id="pipeline-risks-page" class="page">
+                <div class="page-header">
+                    <div class="page-actions">
+                        <button class="btn secondary">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                        <button class="btn secondary">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Deal ID</th>
+                                <th>Rep</th>
+                                <th>Stage</th>
+                                <th>Risk Type</th>
+                                <th>Severity</th>
+                                <th>Value</th>
+                                <th>Recommended Action</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="risks-table-body">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- AI Decisions Page -->
+            <div id="ai-decisions-page" class="page">
+                <div class="decisions-grid" id="decisions-grid">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Approvals Page -->
+            <div id="approvals-page" class="page">
+                <div class="approvals-queue" id="approvals-queue">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Action Log Page -->
+            <div id="action-log-page" class="page">
+                <div class="log-filters">
+                    <select class="filter-select">
+                        <option>All Action Types</option>
+                        <option>Task Creation</option>
+                        <option>CRM Updates</option>
+                        <option>Alerts</option>
+                    </select>
+                    <input type="date" class="filter-date">
+                    <button class="btn secondary">Apply Filters</button>
+                </div>
+                
+                <div class="log-container" id="action-log-container">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Observability Page -->
+            <div id="observability-page" class="page">
+                <div class="observability-grid">
+                    <div class="metrics-panel">
+                        <h3>System Metrics</h3>
+                        <div class="metrics-list">
+                            <div class="metric-row">
+                                <span>Decisions Made (24h)</span>
+                                <span class="metric-value">47</span>
+                            </div>
+                            <div class="metric-row">
+                                <span>Actions Executed (24h)</span>
+                                <span class="metric-value">23</span>
+                            </div>
+                            <div class="metric-row">
+                                <span>Approvals Required (24h)</span>
+                                <span class="metric-value">8</span>
+                            </div>
+                            <div class="metric-row">
+                                <span>System Uptime</span>
+                                <span class="metric-value">99.9%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="audit-panel">
+                        <h3>Audit Trail</h3>
+                        <div class="search-box">
+                            <input type="text" placeholder="Search audit logs...">
+                            <button class="search-btn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <div class="audit-log" id="audit-log">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Management Page -->
+            <div id="data-management-page" class="page">
+                <div class="data-management-tabs">
+                    <button class="tab-btn active" data-tab="deals">Deals & Leads</button>
+                    <button class="tab-btn" data-tab="playbooks">Sales Playbooks</button>
+                    <button class="tab-btn" data-tab="team">Sales Team</button>
+                    <button class="tab-btn" data-tab="crm">CRM Integration</button>
+                </div>
+
+                <!-- Deals & Leads Tab -->
+                <div id="deals-tab" class="tab-content active">
+                    <div class="page-header">
+                        <h3>Deals & Leads Management</h3>
+                        <button class="btn primary" onclick="showAddDealForm()">
+                            <i class="fas fa-plus"></i> Add New Deal
+                        </button>
+                    </div>
+                    
+                    <div class="form-section">
+                        <div id="add-deal-form" class="input-form" style="display: none;">
+                            <h4>Add New Deal</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="deal-company">Company Name *</label>
+                                    <input type="text" id="deal-company" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="deal-value">Deal Value *</label>
+                                    <input type="number" id="deal-value" placeholder="125000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="deal-stage">Deal Stage *</label>
+                                    <select id="deal-stage" required>
+                                        <option value="">Select Stage</option>
+                                        <option value="lead">Lead</option>
+                                        <option value="qualified">Qualified</option>
+                                        <option value="discovery">Discovery</option>
+                                        <option value="proposal">Proposal</option>
+                                        <option value="negotiation">Negotiation</option>
+                                        <option value="closed-won">Closed Won</option>
+                                        <option value="closed-lost">Closed Lost</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="deal-rep">Sales Rep *</label>
+                                    <select id="deal-rep" required>
+                                        <option value="">Select Rep</option>
+                                        <option value="sarah-johnson">Sarah Johnson</option>
+                                        <option value="mike-chen">Mike Chen</option>
+                                        <option value="emily-davis">Emily Davis</option>
+                                        <option value="john-smith">John Smith</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="deal-contact">Primary Contact</label>
+                                    <input type="text" id="deal-contact" placeholder="John Doe">
+                                </div>
+                                <div class="form-group">
+                                    <label for="deal-email">Contact Email</label>
+                                    <input type="email" id="deal-email" placeholder="john@company.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="deal-phone">Contact Phone</label>
+                                    <input type="tel" id="deal-phone" placeholder="+1 (555) 123-4567">
+                                </div>
+                                <div class="form-group">
+                                    <label for="deal-close-date">Expected Close Date</label>
+                                    <input type="date" id="deal-close-date">
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="deal-notes">Notes</label>
+                                <textarea id="deal-notes" rows="3" placeholder="Additional notes about this deal..."></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn secondary" onclick="hideAddDealForm()">Cancel</button>
+                                <button type="button" class="btn primary" onclick="saveDeal()">Save Deal</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="existing-deals">
+                        <h4>Recent Deals</h4>
+                        <div class="deals-list" id="deals-list">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sales Playbooks Tab -->
+                <div id="playbooks-tab" class="tab-content">
+                    <div class="page-header">
+                        <h3>Sales Playbooks & SOPs</h3>
+                        <button class="btn primary" onclick="showAddPlaybookForm()">
+                            <i class="fas fa-plus"></i> Add Playbook
+                        </button>
+                    </div>
+
+                    <div id="add-playbook-form" class="input-form" style="display: none;">
+                        <h4>Add Sales Playbook</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="playbook-title">Playbook Title *</label>
+                                <input type="text" id="playbook-title" placeholder="Discovery Call Playbook" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="playbook-category">Category *</label>
+                                <select id="playbook-category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="prospecting">Prospecting</option>
+                                    <option value="discovery">Discovery</option>
+                                    <option value="demo">Demo/Presentation</option>
+                                    <option value="negotiation">Negotiation</option>
+                                    <option value="closing">Closing</option>
+                                    <option value="objection-handling">Objection Handling</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="playbook-content">Playbook Content *</label>
+                            <textarea id="playbook-content" rows="8" placeholder="Enter the detailed playbook content, steps, scripts, and guidelines..." required></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="playbook-tags">Tags (comma-separated)</label>
+                            <input type="text" id="playbook-tags" placeholder="discovery, qualification, enterprise">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn secondary" onclick="hideAddPlaybookForm()">Cancel</button>
+                            <button type="button" class="btn primary" onclick="savePlaybook()">Save Playbook</button>
+                        </div>
+                    </div>
+
+                    <div class="playbooks-list" id="playbooks-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Sales Team Tab -->
+                <div id="team-tab" class="tab-content">
+                    <div class="page-header">
+                        <h3>Sales Team Management</h3>
+                        <button class="btn primary" onclick="showAddRepForm()">
+                            <i class="fas fa-plus"></i> Add Sales Rep
+                        </button>
+                    </div>
+
+                    <div id="add-rep-form" class="input-form" style="display: none;">
+                        <h4>Add Sales Representative</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="rep-name">Full Name *</label>
+                                <input type="text" id="rep-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rep-email">Email *</label>
+                                <input type="email" id="rep-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rep-role">Role *</label>
+                                <select id="rep-role" required>
+                                    <option value="">Select Role</option>
+                                    <option value="sdr">SDR</option>
+                                    <option value="ae">Account Executive</option>
+                                    <option value="senior-ae">Senior AE</option>
+                                    <option value="manager">Sales Manager</option>
+                                    <option value="director">Sales Director</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="rep-territory">Territory</label>
+                                <input type="text" id="rep-territory" placeholder="West Coast, Enterprise, SMB">
+                            </div>
+                            <div class="form-group">
+                                <label for="rep-quota">Monthly Quota</label>
+                                <input type="number" id="rep-quota" placeholder="50000">
+                            </div>
+                            <div class="form-group">
+                                <label for="rep-manager">Manager</label>
+                                <select id="rep-manager">
+                                    <option value="">Select Manager</option>
+                                    <option value="jane-doe">Jane Doe</option>
+                                    <option value="bob-smith">Bob Smith</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn secondary" onclick="hideAddRepForm()">Cancel</button>
+                            <button type="button" class="btn primary" onclick="saveRep()">Save Rep</button>
+                        </div>
+                    </div>
+
+                    <div class="team-list" id="team-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- CRM Integration Tab -->
+                <div id="crm-tab" class="tab-content">
+                    <div class="page-header">
+                        <h3>CRM Integration Setup</h3>
+                    </div>
+
+                    <div class="crm-config">
+                        <div class="config-section">
+                            <h4>CRM Connection</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="crm-type">CRM System *</label>
+                                    <select id="crm-type">
+                                        <option value="salesforce">Salesforce</option>
+                                        <option value="hubspot">HubSpot</option>
+                                        <option value="pipedrive">Pipedrive</option>
+                                        <option value="mock">Mock Data (Demo)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="crm-url">CRM URL</label>
+                                    <input type="url" id="crm-url" placeholder="https://yourcompany.salesforce.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="crm-username">Username</label>
+                                    <input type="text" id="crm-username">
+                                </div>
+                                <div class="form-group">
+                                    <label for="crm-token">API Token</label>
+                                    <input type="password" id="crm-token">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn primary" onclick="testCRMConnection()">Test Connection</button>
+                                <button type="button" class="btn success" onclick="saveCRMConfig()">Save Configuration</button>
+                            </div>
+                        </div>
+
+                        <div class="config-section">
+                            <h4>Sync Settings</h4>
+                            <div class="sync-options">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="sync-deals" checked>
+                                    <span>Sync Deals & Opportunities</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="sync-activities" checked>
+                                    <span>Sync Activities & Tasks</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="sync-contacts" checked>
+                                    <span>Sync Contacts & Leads</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="sync-performance">
+                                    <span>Sync Rep Performance Data</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="sync-frequency">Sync Frequency</label>
+                                <select id="sync-frequency">
+                                    <option value="5">Every 5 minutes</option>
+                                    <option value="15" selected>Every 15 minutes</option>
+                                    <option value="30">Every 30 minutes</option>
+                                    <option value="60">Every hour</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuration Page -->
+            <div id="configuration-page" class="page">
+                <div class="config-tabs">
+                    <button class="tab-btn active" data-tab="ai-rules">AI Decision Rules</button>
+                    <button class="tab-btn" data-tab="notifications">Notifications</button>
+                    <button class="tab-btn" data-tab="system">System Settings</button>
+                </div>
+
+                <!-- AI Rules Tab -->
+                <div id="ai-rules-tab" class="tab-content active">
+                    <div class="page-header">
+                        <h3>AI Decision Rules</h3>
+                        <button class="btn primary" onclick="showAddRuleForm()">
+                            <i class="fas fa-plus"></i> Add Rule
+                        </button>
+                    </div>
+
+                    <div id="add-rule-form" class="input-form" style="display: none;">
+                        <h4>Add AI Decision Rule</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="rule-name">Rule Name *</label>
+                                <input type="text" id="rule-name" placeholder="Stalled Deal Detection" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rule-category">Category *</label>
+                                <select id="rule-category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="risk-detection">Risk Detection</option>
+                                    <option value="opportunity">Opportunity Identification</option>
+                                    <option value="compliance">Compliance Check</option>
+                                    <option value="performance">Performance Monitoring</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="rule-trigger">Trigger Condition *</label>
+                                <select id="rule-trigger" required>
+                                    <option value="">Select Trigger</option>
+                                    <option value="no-activity">No activity for X days</option>
+                                    <option value="stage-duration">Deal stuck in stage for X days</option>
+                                    <option value="value-threshold">Deal value above/below threshold</option>
+                                    <option value="sop-violation">SOP step missed</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="rule-threshold">Threshold Value</label>
+                                <input type="number" id="rule-threshold" placeholder="7">
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="rule-action">Automated Action *</label>
+                            <select id="rule-action" required>
+                                <option value="">Select Action</option>
+                                <option value="create-task">Create follow-up task</option>
+                                <option value="send-alert">Send manager alert</option>
+                                <option value="update-crm">Update CRM field</option>
+                                <option value="request-approval">Request approval</option>
+                                <option value="schedule-call">Schedule call</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="rule-description">Rule Description</label>
+                            <textarea id="rule-description" rows="3" placeholder="Describe when this rule should trigger and what action it takes..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn secondary" onclick="hideAddRuleForm()">Cancel</button>
+                            <button type="button" class="btn primary" onclick="saveRule()">Save Rule</button>
+                        </div>
+                    </div>
+
+                    <div class="rules-list" id="rules-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Notifications Tab -->
+                <div id="notifications-tab" class="tab-content">
+                    <div class="page-header">
+                        <h3>Notification Settings</h3>
+                    </div>
+
+                    <div class="notification-settings">
+                        <div class="setting-group">
+                            <h4>Email Notifications</h4>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="email-high-risk" checked>
+                                <span>High-risk deal alerts</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="email-approvals" checked>
+                                <span>Approval requests</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="email-daily-summary">
+                                <span>Daily summary reports</span>
+                            </label>
+                        </div>
+
+                        <div class="setting-group">
+                            <h4>Slack Integration</h4>
+                            <div class="form-group">
+                                <label for="slack-webhook">Slack Webhook URL</label>
+                                <input type="url" id="slack-webhook" placeholder="https://hooks.slack.com/...">
+                            </div>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="slack-alerts">
+                                <span>Send alerts to Slack</span>
+                            </label>
+                        </div>
+
+                        <div class="setting-group">
+                            <h4>Alert Thresholds</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="high-risk-threshold">High Risk Threshold ($)</label>
+                                    <input type="number" id="high-risk-threshold" value="100000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="stalled-days">Stalled Deal Days</label>
+                                    <input type="number" id="stalled-days" value="7">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn primary" onclick="saveNotificationSettings()">Save Settings</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Settings Tab -->
+                <div id="system-tab" class="tab-content">
+                    <div class="page-header">
+                        <h3>System Settings</h3>
+                    </div>
+
+                    <div class="system-settings">
+                        <div class="setting-group">
+                            <h4>AI Behavior</h4>
+                            <div class="form-group">
+                                <label for="ai-confidence-threshold">Minimum Confidence Threshold (%)</label>
+                                <input type="range" id="ai-confidence-threshold" min="50" max="95" value="80">
+                                <span id="confidence-value">80%</span>
+                            </div>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="auto-execute-low-risk" checked>
+                                <span>Auto-execute low-risk actions</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="require-approval-high-value">
+                                <span>Require approval for high-value deals</span>
+                            </label>
+                        </div>
+
+                        <div class="setting-group">
+                            <h4>Data Retention</h4>
+                            <div class="form-group">
+                                <label for="log-retention">Log Retention (days)</label>
+                                <select id="log-retention">
+                                    <option value="30">30 days</option>
+                                    <option value="90" selected>90 days</option>
+                                    <option value="180">180 days</option>
+                                    <option value="365">1 year</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn primary" onclick="saveSystemSettings()">Save Settings</button>
+                            <button type="button" class="btn danger" onclick="resetToDefaults()">Reset to Defaults</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Side Panel for Deal Details -->
+    <div id="side-panel" class="side-panel">
+        <div class="side-panel-header">
+            <h3 id="side-panel-title">Deal Details</h3>
+            <button class="close-panel" onclick="closeSidePanel()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="side-panel-content" id="side-panel-content">
+            <!-- Populated dynamically -->
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <div>Loading...</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
