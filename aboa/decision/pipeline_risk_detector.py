@@ -22,8 +22,7 @@ class PipelineRiskDetector:
     """
     Main pipeline risk detection engine that identifies revenue risks
     across deals, leads, and sales activities.
-    
-    Implements Requirements 3.1, 3.2, 3.3, 3.4:
+
     - Detects deals stalled in a stage beyond defined thresholds
     - Identifies meetings completed without scheduled next actions
     - Detects deals with no recent sales activity
