@@ -39,7 +39,7 @@ Track and surface:
 
 ## Architecture
 
-<img width="1890" height="930" alt="R1" src="![AARO Architecture](https://raw.githubusercontent.com/Atharva3131/Autonomous-AI-System-for-Revenue-Operations-AARO-/main/Arch_diagram(AARO).png)" />
+<img width="1890" height="930" alt="AARO Architecture" src="https://raw.githubusercontent.com/Atharva3131/Autonomous-AI-System-for-Revenue-Operations-AARO-/main/Arch_diagram(AARO).png" />
 
 The AARO follows a modular, layered architecture optimized for revenue operations:
 
